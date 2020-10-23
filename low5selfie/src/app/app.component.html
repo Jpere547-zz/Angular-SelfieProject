@@ -25,21 +25,34 @@
     <a class="btn-floating btn-lg" type="button" role="button"><i class="fa fa-github"></i></a>
   </div>
 </nav>
+<nav class="navbar navbar-expand-lg navbar-dark bg-light justify-content-md-center" *ngIf="!toggleSnapshotMode">
+  <div class="row">
+    <button class="btn btn-primary  " (click)="triggerSnapshots()" *ngIf="toggleWebcam"><i class="fa fa-camera-retro"></i> Capture</button>
+    <button class="btn btn-info  " *ngIf="toggleWebcam"><i class="fa fa-recycle"></i> Swap Cameras</button>
+    <button class="btn btn-danger " (click)="toggleWebcams()" *ngIf="!toggleWebcam"><i class="fa fa-toggle-off"></i> Camera On</button>
+    <button class="btn btn-danger " (click)="toggleWebcams()" *ngIf="toggleWebcam"><i class="fa fa-toggle-on"></i> Camera Off</button>
+    </div>
+</nav>
+<nav class="navbar navbar-expand-lg navbar-dark bg-light justify-content-md-center" *ngIf="toggleSnapshotMode">
+  <div class="row justify-content-md-center">
+    <button class="btn btn-primary md-col-5" download="webcamSnapshotImg.imageAsDataUrl"><i class="fa fa-save"></i> Save Locally</button>
+    <button class="btn btn-info md-col-5" (click)=uploadFirebase()><i class="fa fa-cloud-upload"></i> Upload to Firebase</button>
+    <button class="btn btn-warning md-col-5" (click)="toggleRetake()" ><i class="fa fa-repeat"></i> Retake</button>
+</div>
+</nav>
+
+
 </header>
 <body class="bg-secondary mg-auto">
 <div class="container webcam" *ngIf="!webcamSnapshotImg">
-  <div class="row justify-content-md-center"><webcam 
+  <div class="row justify-content-md-center w-auto"><webcam 
+    [height]="1920" [width]="1080"
     [trigger]="triggerSnapshotObservable" (imageCapture)="imageEventHandler($event)" *ngIf="toggleWebcam" 
     [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="triggerNextWebcame"
     ></webcam>
   </div>
   <br/>
-  <div class="row justify-content-md-center">
-  <button class="btn btn-primary md-col-5" (click)="triggerSnapshots()" *ngIf="toggleWebcam"><i class="fa fa-camera-retro"></i> Capture</button>
-  <button class="btn btn-info md-col-5" *ngIf="toggleWebcam"><i class="fa fa-recycle"></i> Swap Cameras</button>
-  <button class="btn btn-warning md-col-5" (click)="toggleWebcams()" *ngIf="!toggleWebcam"><i class="fa fa-toggle-off"></i> Turn Camera On</button>
-  <button class="btn btn-warning md-col-5" (click)="toggleWebcams()" *ngIf="toggleWebcam"><i class="fa fa-toggle-on"></i> Turn Camera Off</button>
-  </div>
+  
 </div>
 <div class="container" *ngIf="webcamSnapshotImg">
   <div class="row justify-content-md-center" >
@@ -47,13 +60,6 @@
       <h2 class="text-center">Captured Image</h2>
       <img [src]="webcamSnapshotImg.imageAsDataUrl" />
     </div>
-  </div>
-  <div class="row justify-content-md-center">
-      <h3>Would you like to save this image Locally or Upload it to Firebase?</h3>
-      <div class="row justify-content-md-center">
-      <button class="btn btn-primary md-col-5" ><i class="fa fa-save"></i> Save Locally</button>
-      <button class="btn btn-info md-col-5" ><i class="fa fa-cloud-upload"></i> Upload to Firebase</button>
-      <button class="btn btn-warning md-col-5" (click)="toggleRetake()" ><i class="fa fa-repeat"></i> Retake</button></div>
   </div>
 </div>
 <router-outlet></router-outlet>
