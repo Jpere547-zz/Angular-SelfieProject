@@ -1,0 +1,70 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-light justify-content-md-center" *ngIf="!toggleSnapshotMode">
+    <div class="row">
+        <button class="btn btn-primary" (click)="triggerSnapshots()" *ngIf="toggleWebcam">
+      <i class="fa fa-camera-retro"></i>
+      Capture
+    </button>
+        <button class="btn btn-info" *ngIf="multipleWebcamsAvailable && toggleWebcam" (click)="toggleNextWebcam()">
+      <i class="fa fa-recycle"></i>
+      Swap Cameras
+    </button>
+        <button class="btn btn-danger" (click)="toggleWebcams()" *ngIf="!toggleWebcam">
+      <i class="fa fa-toggle-off"></i>
+      Camera On
+    </button>
+        <button class="btn btn-danger" (click)="toggleWebcams()" *ngIf="toggleWebcam">
+      <i class="fa fa-toggle-on"></i>
+      Camera Off
+    </button>
+    </div>
+</nav>
+<nav class="navbar navbar-expand-lg navbar-dark bg-light justify-content-md-center" *ngIf="toggleSnapshotMode">
+    <div class="row justify-content-md-center">
+        <button class="btn btn-primary md-col-5" (click)="saveLocally()">
+      <i class="fa fa-save"></i>
+      Save Locally
+    </button>
+        <button class="btn btn-info md-col-5" (click)="uploadFirebase()">
+      <i class="fa fa-cloud-upload"></i>
+      Upload to Firebase
+    </button>
+        <button class="btn btn-warning md-col-5" (click)="toggleRetake()">
+      <i class="fa fa-repeat"></i>
+      Retake
+    </button>
+    </div>
+</nav>
+
+<body class="mg-auto">
+    <div class="container webcam" *ngIf="!webcamSnapshotImg">
+        <div class="row justify-content-md-center w-auto">
+            <webcam [height]="1920" [width]="1080" [trigger]="triggerSnapshotObservable" (imageCapture)="imageEventHandler($event)" *ngIf="toggleWebcam" [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="triggerNextWebcame">
+            </webcam>
+        </div>
+        <br />
+    </div>
+    <div class="container" *ngIf="webcamSnapshotImg">
+        <div class="row justify-content-md-center">
+            <div class="snapshot">
+                <form class="form">
+                    <div class="form-group">
+                        <label>Image Title</label>
+                        <input type="text" [(ngModel)]="imageData.title" name="title" class="form-control rounded-0" required />
+                    </div>
+                </form>
+                <h2 class="text-center">Captured Image</h2>
+                <img [src]="webcamSnapshotImg.imageAsDataUrl" />
+
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped bg-secondary" role="progressbar" [style.width]="(percentage | async) + '%'" [attr.aria-valuenow]="percentage | async" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div *ngIf="isUploadComplete">
+                    <h2><i class="fa fa-check"></i> Upload Complete!</h2>
+                    <button class="btn btn-warning md-col-5" (click)="downloadImage()">
+            <i class="fa fa-download"></i> Download Image
+          </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

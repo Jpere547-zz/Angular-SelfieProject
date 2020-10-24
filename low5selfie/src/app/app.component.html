@@ -1,66 +1,70 @@
-<header>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">
-    <img src="https://jpdesign.tech/images/home-brand-image.png" width="25" height="30" class="d-inline-block align-top" alt="">
-    Low5Selfie
-  </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">
+        <img src="https://jpdesign.tech/images/home-brand-image.png" width="25" height="30" class="d-inline-block align-top" alt="" /> #Low5Selfie
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#"><i class="fa fa-home"></i> Home <span class="sr-only">(current)</span></a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/home" routerLinkActive="active"><i class="fa fa-home"></i>
+          Home
+          <span class="sr-only">(current)</span></a
+        >
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#"><i class="fa fa-user-plus"></i> Sign Up</a>
-      </li>
-      <li class="nav-item ">
-        <a class="nav-link" href="#"><i class="fa fa-sign-in"></i> Sign In</a>
+        <a class="nav-link" routerLink="/gallery" routerLinkActive="active"
+          ><i class="fa fa-image"></i> Gallery</a
+        >
       </li>
     </ul>
-    <a class="btn-floating btn-lg" type="button" role="button"><i class="fa fa-twitter"></i></a>
-    <a class="btn-floating btn-lg" type="button" role="button"><i class="fa fa-linkedin"></i></a>
-    <a class="btn-floating btn-lg" type="button" role="button"><i class="fa fa-github"></i></a>
-  </div>
-</nav>
-<nav class="navbar navbar-expand-lg navbar-dark bg-light justify-content-md-center" *ngIf="!toggleSnapshotMode">
-  <div class="row">
-    <button class="btn btn-primary  " (click)="triggerSnapshots()" *ngIf="toggleWebcam"><i class="fa fa-camera-retro"></i> Capture</button>
-    <button class="btn btn-info  " *ngIf="toggleWebcam"><i class="fa fa-recycle"></i> Swap Cameras</button>
-    <button class="btn btn-danger " (click)="toggleWebcams()" *ngIf="!toggleWebcam"><i class="fa fa-toggle-off"></i> Camera On</button>
-    <button class="btn btn-danger " (click)="toggleWebcams()" *ngIf="toggleWebcam"><i class="fa fa-toggle-on"></i> Camera Off</button>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          *ngIf="!_authService.loggedIn()"
+          routerLink="/register"
+          routerLinkActive="active"
+          ><i class="fa fa-user-plus"></i> Sign Up</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          *ngIf="!_authService.loggedIn()"
+          routerLink="/login"
+          routerLinkActive="active"
+          ><i class="fa fa-sign-in"></i> Sign In</a
+        >
+      </li>
+      <a
+        class="nav-link"
+        style="cursor: pointer"
+        *ngIf="_authService.loggedIn()"
+        (click)="_authService.logoutUser()"
+        ><i class="fa fa-sign-out"></i> Logout</a
+      >
+      <li class="nav-item">
+        <a
+          class="btn-floating btn-lg btn-outline-secondary"
+          type="button"
+          role="button"
+          ><i class="fa fa-twitter"></i
+        ></a>
+            </li>
+            <li class="nav-item">
+                <a class="btn-floating btn-lg btn-outline-secondary" type="button" role="button"><i class="fa fa-linkedin"></i
+        ></a>
+            </li>
+            <li class="nav-item">
+                <a class="btn-floating btn-lg btn-outline-secondary" type="button" role="button"><i class="fa fa-github"></i
+        ></a>
+            </li>
+        </ul>
     </div>
 </nav>
-<nav class="navbar navbar-expand-lg navbar-dark bg-light justify-content-md-center" *ngIf="toggleSnapshotMode">
-  <div class="row justify-content-md-center">
-    <button class="btn btn-primary md-col-5" download="webcamSnapshotImg.imageAsDataUrl"><i class="fa fa-save"></i> Save Locally</button>
-    <button class="btn btn-info md-col-5" (click)=uploadFirebase()><i class="fa fa-cloud-upload"></i> Upload to Firebase</button>
-    <button class="btn btn-warning md-col-5" (click)="toggleRetake()" ><i class="fa fa-repeat"></i> Retake</button>
-</div>
-</nav>
 
-
-</header>
-<body class="bg-secondary mg-auto">
-<div class="container webcam" *ngIf="!webcamSnapshotImg">
-  <div class="row justify-content-md-center w-auto"><webcam 
-    [height]="1920" [width]="1080"
-    [trigger]="triggerSnapshotObservable" (imageCapture)="imageEventHandler($event)" *ngIf="toggleWebcam" 
-    [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="triggerNextWebcame"
-    ></webcam>
-  </div>
-  <br/>
-  
+<div class="container">
+    <router-outlet> </router-outlet>
 </div>
-<div class="container" *ngIf="webcamSnapshotImg">
-  <div class="row justify-content-md-center" >
-    <div class="snapshot">
-      <h2 class="text-center">Captured Image</h2>
-      <img [src]="webcamSnapshotImg.imageAsDataUrl" />
-    </div>
-  </div>
-</div>
-<router-outlet></router-outlet>
-</body>
