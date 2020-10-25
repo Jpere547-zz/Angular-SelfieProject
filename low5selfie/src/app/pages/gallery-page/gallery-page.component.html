@@ -1,1 +1,12 @@
-<p>gallery-page works!</p>
+<div class="row mt-5">
+    <div class="col-md-4 mb-3" *ngFor="let image of images">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">{{ image.title }}</h5>
+            </div>
+            <div class="card-img">
+                <img [src]="image.dataurl" />
+            </div>
+        </div>
+    </div>
+</div>

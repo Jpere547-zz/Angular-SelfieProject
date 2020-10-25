@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <a class="navbar-brand" href="#">
-        <img src="https://jpdesign.tech/images/home-brand-image.png" width="25" height="30" class="d-inline-block align-top" alt="" /> #Low5Selfie
+        <img src="../assets/logo.png" height="90" width="100" class="d-inline-block align-top" alt="" />
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -26,7 +26,7 @@
           *ngIf="!_authService.loggedIn()"
           routerLink="/register"
           routerLinkActive="active"
-          ><i class="fa fa-user-plus"></i> Sign Up</a
+          ><i class="fa fa-user-plus"></i> Register</a
         >
       </li>
       <li class="nav-item">
@@ -35,7 +35,7 @@
           *ngIf="!_authService.loggedIn()"
           routerLink="/login"
           routerLinkActive="active"
-          ><i class="fa fa-sign-in"></i> Sign In</a
+          ><i class="fa fa-sign-in"></i> Login</a
         >
       </li>
       <a

@@ -7,7 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { environment } from '../environments/environment';
 import { AuthService } from './auth/auth.service';
-import { EventService } from './auth/event.service';
+import { ImageService } from './auth/event.service';
 import { TokenInterceptorService } from './auth/token-interceptor.service';
 import { WebcamModule } from 'ngx-webcam';
 
@@ -40,7 +40,7 @@ import { GalleryPageComponent } from './pages/gallery-page/gallery-page.componen
   providers: [
     AuthService,
     AuthGuard,
-    EventService,
+    ImageService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptorService,

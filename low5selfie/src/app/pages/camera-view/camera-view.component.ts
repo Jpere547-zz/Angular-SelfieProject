@@ -16,28 +16,28 @@ import { saveAs } from 'file-saver';
   styleUrls: ['./camera-view.component.scss'],
 })
 export class CameraViewComponent implements OnInit {
+  constructor(
+    private storage: AngularFireStorage,
+    private _auth: AuthService,
+    private _router: Router
+  ) {}
+
+  private nextCamera: Subject<boolean> = new Subject<boolean>(); // Subject Object for Swapping Webcams
+  private snapshotTrigger: Subject<void> = new Subject<void>();
   toggleWebcam = true;
   toggleSnapshotMode = false;
   webErrors: WebcamInitError[] = []; // Capture ngxWebcam errors
   allowCameraSwitch = true;
   webcamSnapshotImg: WebcamImage = null; //Container class for the captured image
   multipleWebcamsAvailable = false; // Checks if the users has multiple webcams
-  private nextCamera: Subject<boolean> = new Subject<boolean>(); // Subject Object for Swapping Webcams
-  private snapshotTrigger: Subject<void> = new Subject<void>();
   downloadURL: Observable<string>;
   task: AngularFireUploadTask;
   percentage: Observable<number>;
   isUploadComplete = false;
-  snapshot: Observable<any>;
   imageData = {
     title: '',
     dataurl: '',
   };
-  constructor(
-    private storage: AngularFireStorage,
-    private _auth: AuthService,
-    private _router: Router
-  ) {}
 
   // On Initialization lists available videoInput devices if more than one is avaiable
   public ngOnInit(): void {
@@ -93,12 +93,11 @@ export class CameraViewComponent implements OnInit {
   }
 
   // Upload to MongoDB
-  public uploadToDB(): void {
-    this.imageData.dataurl = this.webcamSnapshotImg.imageAsDataUrl;
+  public uploadToDB(url: string): void {
+    this.imageData.dataurl = url;
     this._auth.postImage(this.imageData).subscribe(
       (res) => {
         localStorage.setItem('token', res.token);
-        this._router.navigate(['gallery']);
       },
       (err) => console.log(err)
     );
@@ -116,8 +115,6 @@ export class CameraViewComponent implements OnInit {
     const storageRef = this.storage.ref(path);
     this.task = storageRef.put(file);
     this.percentage = this.task.percentageChanges();
-
-    this.snapshot = this.task.snapshotChanges();
     this.task
       .snapshotChanges()
       .pipe(
@@ -128,6 +125,7 @@ export class CameraViewComponent implements OnInit {
             .getDownloadURL()
             .subscribe((url) => {
               this.downloadURL = url;
+              this.uploadToDB(url);
             });
         })
       )

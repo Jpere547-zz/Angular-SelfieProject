@@ -22,11 +22,11 @@
     <div class="row justify-content-md-center">
         <button class="btn btn-primary md-col-5" (click)="saveLocally()">
       <i class="fa fa-save"></i>
-      Save Locally
+      Save
     </button>
         <button class="btn btn-info md-col-5" (click)="uploadFirebase()">
       <i class="fa fa-cloud-upload"></i>
-      Upload to Firebase
+      Upload
     </button>
         <button class="btn btn-warning md-col-5" (click)="toggleRetake()">
       <i class="fa fa-repeat"></i>
@@ -58,8 +58,8 @@
                 <div class="progress">
                     <div class="progress-bar progress-bar-striped bg-secondary" role="progressbar" [style.width]="(percentage | async) + '%'" [attr.aria-valuenow]="percentage | async" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
-                <div *ngIf="isUploadComplete">
-                    <h2><i class="fa fa-check"></i> Upload Complete!</h2>
+                <div class="row justify-content-md-center" *ngIf="isUploadComplete">
+                    <h2 class="col"><i class="fa fa-check"></i> Upload Complete!</h2>
                     <button class="btn btn-warning md-col-5" (click)="downloadImage()">
             <i class="fa fa-download"></i> Download Image
           </button>
@@ -67,4 +67,5 @@
             </div>
         </div>
     </div>
+    <a [href]="downloadURL">{{ downloadURL }}</a>
 </body>

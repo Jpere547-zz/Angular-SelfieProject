@@ -5,7 +5,8 @@ const mongoose = require("mongoose");
 const User = require("../models/user");
 const Image = require("../models/image");
 const jwt = require("jsonwebtoken");
-const db = "";
+const db =
+    "mongodb+srv://jpdesign:FYHuXsoOoyz5NGIr@cluster0.jwlqm.mongodb.net/Low5Selfie?retryWrites=true&w=majority";
 
 mongoose.connect(db, function(err) {
     if (err) {
@@ -33,12 +34,43 @@ function verifyToken(req, res, next) {
 
 router.get("/gallery", verifyToken, (req, res) => {
     // GET LOCAL DATA DB
+    let coll = mongoose.connection;
+    Image.find({}, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send(result);
+        }
+    });
+    // coll.find({}).toArray((err, result) => {
+    //     if (err) {
+    //         console.log(err);
+    //     } else {
+    //         console.log(result);
+    //         res.send(JSON.stringify(result));
+    //     }
+    // });
 });
 
-router.post("/home", verifyToken, (req, res) => {
+router.post("/gallery", verifyToken, (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     let cameraSnapshot = req.body;
     let image = new Image(cameraSnapshot);
     // POST DATA & LOCAL DB
+    image.save((err, image) => {
+        if (err) {
+            console.log(err);
+        } else {
+            let payload = {
+                subject: image._id,
+            };
+            let token = jwt.sign(payload, "secretKey");
+            res.status(200).send({ token });
+        }
+    });
 });
 
 router.post("/register", [check("email").isEmail()], (req, res) => {

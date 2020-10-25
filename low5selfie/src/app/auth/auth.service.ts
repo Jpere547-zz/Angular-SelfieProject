@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 export class AuthService {
   private _registerUrl = 'http://localhost:3005/server/register';
   private _loginUrl = 'http://localhost:3005/server/login';
-  private _imagePostUrl = 'http://localhost:3005/server/home';
+  private _imagePostUrl = 'http://localhost:3005/server/gallery';
 
   constructor(private http: HttpClient, private _router: Router) {}
 
@@ -23,8 +23,8 @@ export class AuthService {
     this._router.navigate(['/home']);
   }
 
-  postImage(user) {
-    return this.http.post<any>(this._imagePostUrl, user);
+  postImage(image) {
+    return this.http.post<any>(this._imagePostUrl, image);
   }
 
   getToken() {
