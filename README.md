@@ -16,7 +16,7 @@ There are not enough selfies of low fives in the world. Aspiring IG influencers 
 ## Preview
 
 <p align="center">
-  <img src="Project_Preview.png" width="800" alt="accessibility text">
+  <img src="project_preview.png" width="800" alt="accessibility text">
 </p>
 
 ## Problem
