@@ -1,11 +1,16 @@
 <div class="row mt-5">
-    <div class="col-md-4 mb-3" *ngFor="let image of images">
+    <div class="col-md-3 mb-3" *ngFor="let image of images">
         <div class="card text-center">
             <div class="card-body">
                 <h5 class="card-title">{{ image.title }}</h5>
             </div>
             <div class="card-img">
                 <img [src]="image.dataurl" />
+            </div>
+            <div class="card-btn">
+                <button class="btn btn-warning" (click)="downloadImage(image.dataurl)">
+          <i class="fa fa-download"></i> Download Image
+        </button>
             </div>
         </div>
     </div>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ImageService } from '../../auth/event.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-gallery-page',
@@ -15,5 +16,9 @@ export class GalleryPageComponent implements OnInit {
       (res) => (this.images = res),
       (err) => console.log(err)
     );
+  }
+
+  public downloadImage(url): void {
+    saveAs(url, 'image.png');
   }
 }

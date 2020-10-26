@@ -2,11 +2,10 @@ progress::-webkit-progress-value {
     transition: width 0.1s ease;
 }
 
-.row {
-    padding: 10px;
+.row.cameraRow {
+    justify-content: center;
 }
 
-.btn {
-    padding: 5px;
-    ;
+.cameraViewMirrored {
+    position: relative;
 }

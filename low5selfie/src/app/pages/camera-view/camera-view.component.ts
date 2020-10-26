@@ -9,6 +9,8 @@ import {
 import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
 import { saveAs } from 'file-saver';
+import mergeImages from 'merge-images';
+import { imageProcessor, mirror } from 'ts-image-processor';
 
 @Component({
   selector: 'app-camera-view',
@@ -34,6 +36,8 @@ export class CameraViewComponent implements OnInit {
   task: AngularFireUploadTask;
   percentage: Observable<number>;
   isUploadComplete = false;
+  mergedImageBlob: Blob;
+  mergedImageURL;
   imageData = {
     title: '',
     dataurl: '',
@@ -61,6 +65,7 @@ export class CameraViewComponent implements OnInit {
     this.webcamSnapshotImg = null;
     this.toggleSnapshotMode = false;
     this.isUploadComplete = false;
+    this.downloadURL = null;
   }
 
   // Toggle function to take snapshot
@@ -72,10 +77,15 @@ export class CameraViewComponent implements OnInit {
   public imageEventHandler(webcamSnapshotImg: WebcamImage): void {
     this.webcamSnapshotImg = webcamSnapshotImg;
     this.toggleSnapshotMode = true;
+    this.combImage(
+      this.webcamSnapshotImg.imageAsDataUrl,
+      this.webcamSnapshotImg.imageAsDataUrl
+    );
   }
 
   // Convert Base64 WebcamImage to File for Local Save
-  public imageToBlob(imageBase64) {
+  public imageToBlob(imageBase64: string) {
+    imageBase64 = imageBase64.replace(/^[^,]+,/, '');
     const byteString = window.atob(imageBase64);
     const arrayBuffer = new ArrayBuffer(byteString.length);
     const int8Array = new Uint8Array(arrayBuffer);
@@ -83,12 +93,38 @@ export class CameraViewComponent implements OnInit {
       int8Array[i] = byteString.charCodeAt(i);
     }
     const imageBlob = new Blob([int8Array], { type: 'image/png' });
-    return imageBlob;
+    this.mergedImageBlob = imageBlob;
+    let reader = new FileReader();
+    reader.readAsDataURL(imageBlob);
+    reader.onloadend = () => {
+      this.mergedImageURL = reader.result;
+    };
+  }
+
+  // Combine Image and Mirrored Together
+  public combImage(image1: string, image2: string) {
+    imageProcessor
+      .src(image2)
+      .pipe(mirror())
+      .then((mirroredImg) => {
+        mergeImages(
+          [
+            { src: image1, x: 0, y: 0 },
+            { src: mirroredImg, x: 640, y: 0 },
+          ],
+          { width: 1280, height: 480 }
+        )
+          .then((b64: string) => {
+            this.imageToBlob(b64);
+          })
+          .catch((err) => console.log(err));
+      });
   }
 
   // Save Image File Locally
   public saveLocally(): void {
-    const image = this.imageToBlob(this.webcamSnapshotImg.imageAsBase64);
+    const image = this.mergedImageBlob;
+    console.log(image);
     saveAs(image, 'image.png');
   }
 
@@ -110,7 +146,7 @@ export class CameraViewComponent implements OnInit {
 
   // Upload to Firebase
   public uploadFirebase(): void {
-    const file = this.imageToBlob(this.webcamSnapshotImg.imageAsBase64);
+    const file = this.mergedImageBlob;
     const path = `images/${this.imageData.title}`;
     const storageRef = this.storage.ref(path);
     this.task = storageRef.put(file);
