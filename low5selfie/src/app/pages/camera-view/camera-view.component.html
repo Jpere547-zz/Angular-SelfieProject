@@ -1,81 +1,141 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-light justify-content-md-center" *ngIf="!toggleSnapshotMode">
-    <div class="row">
-        <button class="btn btn-primary" (click)="triggerSnapshots()" [disabled]="!toggleWebcam">
+<nav
+  class="navbar navbar-expand-lg navbar-dark bg-light justify-content-md-center"
+  *ngIf="!toggleSnapshotMode"
+>
+  <div class="row">
+    <button
+      class="btn btn-primary"
+      (click)="triggerSnapshots()"
+      [disabled]="!toggleWebcam"
+    >
       <i class="fa fa-camera-retro"></i>
       Capture
     </button>
-        <button class="btn btn-info" [disabled]="!multipleWebcamsAvailable" (click)="toggleNextWebcam()">
+    <button
+      class="btn btn-info"
+      [disabled]="!multipleWebcamsAvailable"
+      (click)="toggleNextWebcam()"
+    >
       <i class="fa fa-recycle"></i>
       Swap Cameras
     </button>
-        <button class="btn btn-danger" (click)="toggleWebcams()" *ngIf="!toggleWebcam">
+    <button
+      class="btn btn-danger"
+      (click)="toggleWebcams()"
+      *ngIf="!toggleWebcam"
+    >
       <i class="fa fa-toggle-off"></i>
       Camera On
     </button>
-        <button class="btn btn-danger" (click)="toggleWebcams()" *ngIf="toggleWebcam">
+    <button
+      class="btn btn-danger"
+      (click)="toggleWebcams()"
+      *ngIf="toggleWebcam"
+    >
       <i class="fa fa-toggle-on"></i>
       Camera Off
     </button>
-    </div>
+  </div>
 </nav>
-<nav class="navbar navbar-expand-lg navbar-dark bg-light justify-content-md-center" *ngIf="toggleSnapshotMode">
-    <div class="row justify-content-md-center">
-        <button class="btn btn-primary md-col-4" [disabled]="!imageData.title" (click)="saveLocally()">
+<nav
+  class="navbar navbar-expand-lg navbar-dark bg-light justify-content-md-center"
+  *ngIf="toggleSnapshotMode"
+>
+  <div class="row justify-content-md-center">
+    <button
+      class="btn btn-primary md-col-4"
+      [disabled]="!imageData.title"
+      (click)="saveLocally()"
+    >
       <i class="fa fa-save"></i>
       Save
     </button>
-        <button class="btn btn-info md-col-4" [disabled]="!imageData.title" (click)="uploadFirebase()">
+    <button
+      class="btn btn-info md-col-4"
+      [disabled]="!imageData.title"
+      (click)="uploadFirebase()"
+    >
       <i class="fa fa-cloud-upload"></i>
       Upload
     </button>
-        <button class="btn btn-warning md-col-4" (click)="toggleRetake()">
+    <button class="btn btn-warning md-col-4" (click)="toggleRetake()">
       <i class="fa fa-repeat"></i>
       Retake
     </button>
-    </div>
+  </div>
 </nav>
 
 <body class="mg-auto">
-    <div class="container-fluid" *ngIf="!webcamSnapshotImg">
-        <div class="row cameraRow">
-            <div class="cameraView">
-                <webcam [trigger]="triggerSnapshotObservable" (imageCapture)="imageEventHandler($event)" *ngIf="toggleWebcam" [allowCameraSwitch]="allowCameraSwitch" mirrorImage="never">
-                </webcam>
-            </div>
-            <div class="cameraViewMirrored">
-                <webcam *ngIf="toggleWebcam" [allowCameraSwitch]="allowCameraSwitch" mirrorImage="always">
-                </webcam>
-            </div>
-        </div>
-        <br />
+  <div class="container-fluid" *ngIf="!webcamSnapshotImg">
+    <div class="row cameraRow">
+      <div class="cameraView">
+        <webcam
+          [trigger]="triggerSnapshotObservable"
+          (imageCapture)="imageEventHandler($event)"
+          *ngIf="toggleWebcam"
+          [allowCameraSwitch]="allowCameraSwitch"
+          mirrorImage="never"
+          [switchCamera]="triggerNextWebcame"
+        >
+        </webcam>
+      </div>
+      <div class="cameraViewMirrored">
+        <webcam
+          *ngIf="toggleWebcam"
+          [allowCameraSwitch]="allowCameraSwitch"
+          mirrorImage="always"
+          [switchCamera]="triggerNextWebcame"
+        >
+        </webcam>
+      </div>
     </div>
-    <div class="container" *ngIf="webcamSnapshotImg">
-        <div class="row justify-content-md-center">
-            <div class="snapshot">
-                <form class="form display-flex justify-content-center">
-                    <div class="form-group">
-                        <label>Image Title</label>
-                        <input class="col-6" type="text" [(ngModel)]="imageData.title" name="title" class="form-control rounded-0" placeholder="Please Enter An Image Title" required />
-                    </div>
-                </form>
-                <h2 class="text-center">Captured Image</h2>
-                <img [src]="mergedImageURL" />
+    <br />
+  </div>
+  <div class="container" *ngIf="webcamSnapshotImg">
+    <div class="row justify-content-md-center">
+      <div class="snapshot">
+        <form class="form display-flex justify-content-center">
+          <div class="form-group">
+            <label>Image Title</label>
+            <input
+              class="col-6"
+              type="text"
+              [(ngModel)]="imageData.title"
+              name="title"
+              class="form-control rounded-0"
+              placeholder="Please Enter An Image Title"
+              required
+            />
+          </div>
+        </form>
+        <h2 class="text-center">Captured Image</h2>
+        <img [src]="mergedImageURL" />
 
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped bg-secondary" role="progressbar" [style.width]="(percentage | async) + '%'" [attr.aria-valuenow]="percentage | async" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <div class="row justify-content-md-center" *ngIf="isUploadComplete">
-                    <h2 class="md-col-6 ml">
-                        <i class="fa fa-check"></i> Upload Complete!
-                    </h2>
-                    <button class="btn btn-warning md-col-6 mr" (click)="downloadImage()">
+        <div class="progress">
+          <div
+            class="progress-bar progress-bar-striped bg-secondary"
+            role="progressbar"
+            [style.width]="(percentage | async) + '%'"
+            [attr.aria-valuenow]="percentage | async"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          ></div>
+        </div>
+        <div class="row justify-content-md-center" *ngIf="isUploadComplete">
+          <h2 class="md-col-6 ml">
+            <i class="fa fa-check"></i> Upload Complete!
+          </h2>
+          <button class="btn btn-warning md-col-6 mr" (click)="downloadImage()">
             <i class="fa fa-download"></i> Download Image
           </button>
-                </div>
-            </div>
         </div>
-        <div class="row">
-            Download URL:<a class="justify-content-center text-md-center" [href]="downloadURL">
+      </div>
+    </div>
+    <div class="row">
+      Download URL:<a
+        class="justify-content-center text-md-center"
+        [href]="downloadURL"
+      >
         {{ downloadURL }}</a
       >
     </div>

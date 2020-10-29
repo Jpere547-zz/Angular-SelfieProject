@@ -42,14 +42,6 @@ router.get("/gallery", verifyToken, (req, res) => {
             res.send(result);
         }
     });
-    // coll.find({}).toArray((err, result) => {
-    //     if (err) {
-    //         console.log(err);
-    //     } else {
-    //         console.log(result);
-    //         res.send(JSON.stringify(result));
-    //     }
-    // });
 });
 
 router.post("/gallery", verifyToken, (req, res) => {

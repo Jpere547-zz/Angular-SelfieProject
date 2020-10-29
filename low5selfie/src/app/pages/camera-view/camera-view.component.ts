@@ -174,7 +174,7 @@ export class CameraViewComponent implements OnInit {
   }
 
   // Creates a new Observable with nextCamera as the source.
-  public get triggerNextWebcame(): Observable<boolean | string> {
+  public get triggerNextWebcame(): Observable<boolean> {
     return this.nextCamera.asObservable();
   }
 }
