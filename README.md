@@ -1,13 +1,11 @@
-# Low5Selfie-CodeChallenge
-
-There are not enough selfies of low fives in the world. Aspiring IG influencers are looking for unique tools to create quality content that will differentiate their feed, grow their follower count, and get them the blue checkmark.
+# Low 5 Selfie
+A small application created with the idea of taking a Low 5 Selfie using Angular, Typescript, Express, NodeJS, and MongoDB
 
 [![shieldio made-with](https://img.shields.io/badge/Version-v1.0.5-orange)]() [![shieldio made-with](https://img.shields.io/badge/Status-Completed-darkgreen)]() [![shieldio made-with](https://img.shields.io/badge/Hours_Log-10%20Hours-black)]()
 
 ## Table of contents
 
 - [Preview](#preview)
-- [Problem](#problem)
 - [Programming Languages & Skills](#programming-languages-&-skills)
 - [Setup and Installation](#setup-and-installation)
 - [Dependences Used](#dependences-used)
@@ -19,9 +17,6 @@ Demo: https://low5selfie.web.app/
   <img src="project_preview.png" width="800" alt="accessibility text">
 </p>
 
-## Problem
-
-Craft a unique experience that makes it super easy to take a selfie while giving yourself a low five. #Low5Selfie
 
 ## Programming Languages & Frameworks
 
